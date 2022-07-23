@@ -30,7 +30,7 @@ Future<List<Pokedex>> getPokemonList() async {
   int? count = await getPokemonCount();
   var url = "https://pokeapi.co/api/v2/pokemon";
 
-  for (var i = 1; i <= 20!; i++) {
+  for (var i = 1; i <= count!; i++) {
     Response response = await Dio()
         .get(url + "/$i",
             options: Options(
