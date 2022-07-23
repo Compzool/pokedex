@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:pokedex/views/bloc/pokemon_bloc.dart';
 import 'package:pokedex/widgets/splash_screen.dart';
 
 void main() {
@@ -13,13 +15,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Pokedex',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Noto Sans',
+    return BlocProvider(
+      create: (context) => PokemonBloc(),
+      child: MaterialApp(
+        title: 'Pokedex',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: 'Noto Sans',
+        ),
+        home: const SplashScreen(),
       ),
-      home: const SplashScreen(),
     );
   }
 }
