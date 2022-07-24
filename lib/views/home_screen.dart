@@ -35,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     // final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -115,29 +116,33 @@ class _HomeScreenState extends State<HomeScreen>
               return TabBarView(
                 children: [
                   CustomScrollView(slivers: [
-                    SliverGrid(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 1,
-                      ),
-                      delegate: SliverChildBuilderDelegate(
-                        //API CALL - CONTROLLER TAKES THE API CALL AND MAKES A LIST.
-                        (context, index) {
-                          debugPrint(
-                              "Type 1: ${state.list[index].types!.first.toJson()}");
-                          // return Container(
-                          //   height: 20,
-                          //   color: Colors.amber[100],
-                          //   alignment: Alignment.center,
-                          //   child: Text(state.list[index].name.toString()),
-                          // );
+                    SliverPadding(
+                      padding: const EdgeInsets.all(10),
+                      sliver: SliverGrid(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          mainAxisExtent: 190,
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 1,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 1,
+                        ),
+                        delegate: SliverChildBuilderDelegate(
+                          //API CALL - CONTROLLER TAKES THE API CALL AND MAKES A LIST.
+                          (context, index) {
+                            debugPrint(
+                                "Type 1: ${state.list[index].types!.first.toJson()}");
+                            // return Container(
+                            //   height: 20,
+                            //   color: Colors.amber[100],
+                            //   alignment: Alignment.center,
+                            //   child: Text(state.list[index].name.toString()),
+                            // );
 
-                          return BuildPokemon(context, state.list[index]);
-                        },
-                        childCount: state.list.length,
+                            return BuildPokemon(context, state.list[index]);
+                          },
+                          childCount: state.list.length,
+                        ),
                       ),
                     ),
                   ]),
@@ -145,9 +150,9 @@ class _HomeScreenState extends State<HomeScreen>
                 ],
               );
             } else if (state is PokemonLoading) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else {
-              return SizedBox();
+              return const SizedBox();
             }
           },
         ),
@@ -156,75 +161,76 @@ class _HomeScreenState extends State<HomeScreen>
   }
 }
 
-// ignore: non_constant_identifier_names
-Widget BuildPokemon(BuildContext context, Pokedex character) => Card(
-    color: colorSelector(character.types!.first.typeCategory!.name!)
-        .withOpacity(0.3),
-    child: SizedBox(
-      height: 186,
-      width: 110,
-      child: Column(
-        children: [
-          Image.network(
-            character.sprites!.other!.officialArtwork!.frontDefault!,
-            width: 104,
-            height: 104,
+Widget BuildPokemon(BuildContext context, Pokedex character) => InkWell(
+      child: SizedBox(
+        height: 184,
+        width: 110,
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
           ),
-          Container(
-            color: Colors.white,
-            child: Column(
+          child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisSize: MainAxisSize.min,
+
               children: [
-                Text(
-                  "#${character.id}",
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: unselectedLabelColor),
+                Container(
+                  color:
+                      colorSelector(character.types!.first.typeCategory!.name!)
+                          .withOpacity(0.3),
+                  child: Image.network(
+                    character.sprites!.other!.officialArtwork!.frontDefault!,
+                    fit: BoxFit.contain,
+                    height: 104,
+                    width: 104,
+                  ),
                 ),
-                Text(
-                  character.name!,
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: unselectedLabelColor),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 0, 0, 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "#${character.id}",
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: unselectedLabelColor),
+                      ),
+                      Text(
+                        character.name!,
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: unselectedLabelColor),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: character.types!.map((i) {
+                          return character.types!.length == i.slot
+                              ? Text(
+                                  i.typeCategory!.name!,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: unselectedLabelColor),
+                                )
+                              : Text(
+                                  i.typeCategory!.name! + ', ',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: unselectedLabelColor),
+                                );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                    children: character.types!.map((i) {
-                  return character.types!.length == i.slot
-                      ? new Text(i.typeCategory!.name!)
-                      : new Text(i.typeCategory!.name! + ', ');
-                }).toList()
-
-                    //  for(var i=0;i<character.types!.length;i++){
-                    //    Text(
-                    //             character.types![index].typeCategory!.name!,
-                    //             style: TextStyle(
-                    //                 fontSize: 14,
-                    //                 fontWeight: FontWeight.w600,
-                    //                 color: unselectedLabelColor),
-                    //           )
-
-                    ),
-              ],
-            ),
-          )
-        ],
+              ]),
+        ),
       ),
-    )); //Card
-// return index == character.types!.length - 1
-//                         ? Text(
-//                             character.types![index].typeCategory!.name!,
-//                             style: TextStyle(
-//                                 fontSize: 14,
-//                                 fontWeight: FontWeight.w600,
-//                                 color: unselectedLabelColor),
-//                           )
-//                         : Text(
-//                             character.types![index].typeCategory!.name! + ", ",
-//                             style: TextStyle(
-//                                 fontSize: 14,
-//                                 fontWeight: FontWeight.w600,
-//                                 color: unselectedLabelColor));
+    );
