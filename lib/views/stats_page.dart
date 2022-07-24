@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,8 @@ import 'package:get/get.dart';
 import 'package:pokedex/controllers/bloc/pokemon_bloc.dart';
 import 'package:pokedex/models/pokedex.dart';
 import 'package:pokedex/widgets/color_selector.dart';
-import 'package:pokedex/widgets/constants.dart';
-import 'package:pokedex/widgets/hex_colors.dart';
+
+import 'package:pokedex/widgets/type_colors.dart';
 
 class CharacteristicsPage extends StatefulWidget {
   Pokedex character;
@@ -22,6 +23,7 @@ class CharacteristicsPage extends StatefulWidget {
 class _CharacteristicsPageState extends State<CharacteristicsPage> {
   late Pokedex character;
   late var color;
+  // List<Pokedex> stats= [character.stats[index].pokeStats.name];
   @override
   void initState() {
     // TODO: implement initState
@@ -52,6 +54,7 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               color: colorSelector(character.types!.first.typeCategory!.name!)
@@ -78,17 +81,17 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
                             return character.types!.length == i.slot
                                 ? Text(
                                     i.typeCategory!.name!.capitalize!,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
-                                        color: unselectedLabelColor),
+                                        color: TypeColors.labelColor),
                                   )
                                 : Text(
                                     i.typeCategory!.name!.capitalize! + ', ',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
-                                        color: unselectedLabelColor),
+                                        color: TypeColors.labelColor),
                                   );
                           }).toList(),
                         ),
@@ -97,10 +100,10 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
                         ),
                         Text(
                           "#" + character.id.toString().padLeft(3, '0'),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
-                              color: pokedexColor),
+                              color: TypeColors.labelColor),
                         ),
                       ],
                     ),
@@ -155,17 +158,17 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
                           style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
-                              color: unselectedLabelColor),
+                              color: TypeColors.fadedColor),
                         ),
                         SizedBox(
                           height: height * 0.005,
                         ),
                         Text(
                           character.height.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
-                              color: labelColor),
+                              color: TypeColors.labelColor),
                         ),
                       ],
                     ),
@@ -176,22 +179,22 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           "Weight",
                           style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
-                              color: unselectedLabelColor),
+                              color: TypeColors.fadedColor),
                         ),
                         SizedBox(
                           height: height * 0.005,
                         ),
                         Text(
                           character.weight.toString(),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
-                              color: labelColor),
+                              color: TypeColors.labelColor),
                         ),
                       ],
                     ),
@@ -202,22 +205,22 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
+                        const Text(
                           "BMI",
                           style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
-                              color: unselectedLabelColor),
+                              color: TypeColors.fadedColor),
                         ),
                         SizedBox(
                           height: height * 0.005,
                         ),
                         Text(
                           bmi.toStringAsFixed(2),
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
-                              color: labelColor),
+                              color: TypeColors.labelColor),
                         ),
                       ],
                     ),
@@ -229,37 +232,64 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
               thickness: 10,
               color: Colors.grey[300],
             ),
-            BlocBuilder<PokemonBloc, PokemonState>(
-              builder: (context, state) {
-                if (state is PokemonLoaded) {
-                  return Container(
-                    height: height,
-                    color: Colors.greenAccent,
-                    child: TextButton(
-                      onPressed: () {
-                        if (state is PokemonLoaded) {
-                          state.favorites.contains(character)
-                              ? context
-                                  .read<PokemonBloc>()
-                                  .add(RemoveFromFavorites(character))
-                              : context
-                                  .read<PokemonBloc>()
-                                  .add(AddToFavorites(character));
-                        }
-                      },
-                      child: state.favorites.contains(character)
-                          ? Text("Remove From Favorites")
-                          : Text("Add To Favorites"),
-                    ),
-                  );
-                } else {
-                  return SizedBox();
-                }
-              },
-            )
+            Padding(
+              padding: EdgeInsets.only(left: width * 0.052, top: height * 0.01),
+              child: Container(
+                height: height * 0.04,
+                child: const Text(
+                  "Base Stats",
+                  style: TextStyle(
+                    color: TypeColors.labelColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
+            Divider(
+              thickness: 1,
+              color: Colors.grey[300],
+            ),
+
+            // BlocBuilder<PokemonBloc, PokemonState>(
+            //   builder: (context, state) {
+            //     if (state is PokemonLoaded) {
+            //       return Container(
+            //         height: height,
+            //         color: Colors.greenAccent,
+            //         child: TextButton(
+            //           onPressed: () {
+            //             if (state is PokemonLoaded) {
+            //               state.favorites.contains(character)
+            //                   ? context
+            //                       .read<PokemonBloc>()
+            //                       .add(RemoveFromFavorites(character))
+            //                   : context
+            //                       .read<PokemonBloc>()
+            //                       .add(AddToFavorites(character));
+            //             }
+            //           },
+            //           child: state.favorites.contains(character)
+            //               ? Text("Remove From Favorites")
+            //               : Text("Add To Favorites"),
+            //         ),
+            //       );
+            //     } else {
+            //       return SizedBox();
+            //     }
+            //   },
+            // )
           ],
         ),
       ),
     );
   }
+
+  // Widget BuildStats(BuildContext context, Pokedex character, Color color) {
+  //   return Container(
+  //     child: ListView.builder(
+        
+  //       itemBuilder: itemBuilder)
+  //   )
+  // }
 }

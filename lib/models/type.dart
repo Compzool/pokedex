@@ -10,7 +10,8 @@ class Type {
         slot: json['slot'] as int?,
         typeCategory: json['type'] == null
             ? null
-            : TypeCategory.fromJson(json['type'] as Map<String, dynamic>),
+            : TypeCategory.fromJson(
+                json['type'] as Map<String, dynamic>),
       );
 
   Map<String, dynamic> toJson() => {

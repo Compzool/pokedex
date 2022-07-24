@@ -1,10 +1,8 @@
-import 'dart:math';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:meta/meta.dart';
+
 import 'package:pokedex/controllers/api_controller.dart';
 import 'package:pokedex/models/pokedex.dart';
 

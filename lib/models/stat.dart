@@ -1,23 +1,23 @@
-import 'stat.dart';
+import 'poke_stats.dart';
 
 class Stat {
   int? baseStat;
   int? effort;
-  Stat? stat;
+  PokeStats? pokeStats;
 
-  Stat({this.baseStat, this.effort, this.stat});
+  Stat({this.baseStat, this.effort, this.pokeStats});
 
   factory Stat.fromJson(Map<String, dynamic> json) => Stat(
         baseStat: json['base_stat'] as int?,
         effort: json['effort'] as int?,
-        stat: json['stat'] == null
+        pokeStats: json['stat'] == null
             ? null
-            : Stat.fromJson(json['stat'] as Map<String, dynamic>),
+            : PokeStats.fromJson(json['stat'] as Map<String, dynamic>),
       );
 
   Map<String, dynamic> toJson() => {
         'base_stat': baseStat,
         'effort': effort,
-        'stat': stat?.toJson(),
+        'poke_stats': pokeStats?.toJson(),
       };
 }

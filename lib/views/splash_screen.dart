@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 import 'package:lottie/lottie.dart';
 import 'package:pokedex/views/home_screen.dart';
-import 'package:pokedex/widgets/constants.dart';
-import 'package:pokedex/widgets/hex_colors.dart';
+
+import 'package:pokedex/widgets/type_colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final height = MediaQuery.of(context).size.height;
     changeScreen();
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: TypeColors.backgroundColor,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,

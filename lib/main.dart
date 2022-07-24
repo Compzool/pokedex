@@ -9,8 +9,8 @@ Future<void> main() async {
   // WidgetsFlutterBinding.ensureInitialized();
   //final storage = await HydratedStorage.build(storageDirectory: ...);
   runApp(const MyApp());
-  
 }
+
 extension StringExtension on String {
   String capitalize() {
     return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
@@ -35,5 +35,4 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-  
 }

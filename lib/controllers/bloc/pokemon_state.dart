@@ -14,9 +14,9 @@ class PokemonLoading extends PokemonState {}
 class PokemonLoaded extends PokemonState {
   final List<Pokedex> list;
   final List<Pokedex> favorites;
-  PokemonLoaded(this.list,this.favorites);
+  PokemonLoaded(this.list, this.favorites);
   @override
-  List<Object?> get props => [list,favorites];
+  List<Object?> get props => [list, favorites];
 }
 
 class PokemonError extends PokemonState {

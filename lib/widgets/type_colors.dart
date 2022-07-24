@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex/widgets/hex_colors.dart';
 
 class TypeColors {
   static const Color lightTeal = Color(0xFF48D0B0);
@@ -31,4 +32,10 @@ class TypeColors {
   static const Color lightRed = Color(0xFFFB6C6C);
   static const Color greenAccent = Colors.greenAccent;
   static const Color tealAccent = Colors.tealAccent;
+
+  static const Color fadedColor = Color(0xFF6B6B6B);
+  static const Color labelColor = Color(0xFF161A33);
+  static const Color indicatorColor = Color(0xFF3558CD);
+  static const Color pokedexColor = Color(0xFF61A33);
+  static const Color backgroundColor = Color(0xFF3558CD);
 }
