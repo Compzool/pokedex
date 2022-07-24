@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pokedex/models/pokedex.dart';
-import 'package:pokedex/views/bloc/pokemon_bloc.dart';
+import 'package:pokedex/controllers/bloc/pokemon_bloc.dart';
+import 'package:pokedex/views/stats_page.dart';
 import 'package:pokedex/widgets/color_selector.dart';
 import 'package:pokedex/widgets/constants.dart';
 import 'package:pokedex/widgets/hex_colors.dart';
@@ -33,13 +34,12 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    // final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
 
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Colors.grey[100],
         appBar: AppBar(
           title: Column(
             children: [
@@ -117,13 +117,13 @@ class _HomeScreenState extends State<HomeScreen>
                 children: [
                   CustomScrollView(slivers: [
                     SliverPadding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(8),
                       sliver: SliverGrid(
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           mainAxisExtent: 190,
                           crossAxisCount: 3,
-                          crossAxisSpacing: 1,
+                          crossAxisSpacing: 0.277,
                           mainAxisSpacing: 12,
                           childAspectRatio: 1,
                         ),
@@ -132,12 +132,6 @@ class _HomeScreenState extends State<HomeScreen>
                           (context, index) {
                             debugPrint(
                                 "Type 1: ${state.list[index].types!.first.toJson()}");
-                            // return Container(
-                            //   height: 20,
-                            //   color: Colors.amber[100],
-                            //   alignment: Alignment.center,
-                            //   child: Text(state.list[index].name.toString()),
-                            // );
 
                             return BuildPokemon(context, state.list[index]);
                           },
@@ -146,7 +140,32 @@ class _HomeScreenState extends State<HomeScreen>
                       ),
                     ),
                   ]),
-                  const Center(child: Text('Person'))
+                  CustomScrollView(slivers: [
+                    SliverPadding(
+                      padding: const EdgeInsets.all(8),
+                      sliver: SliverGrid(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          mainAxisExtent: 190,
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 0.277,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 1,
+                        ),
+                        delegate: SliverChildBuilderDelegate(
+                          //API CALL - CONTROLLER TAKES THE API CALL AND MAKES A LIST.
+                          (context, index) {
+                            debugPrint(
+                                "Type 1: ${state.favorites[index].types!.first.toJson()}");
+
+                            return BuildPokemon(
+                                context, state.favorites[index]);
+                          },
+                          childCount: state.favorites.length,
+                        ),
+                      ),
+                    ),
+                  ]),
                 ],
               );
             } else if (state is PokemonLoading) {
@@ -159,9 +178,15 @@ class _HomeScreenState extends State<HomeScreen>
       ),
     );
   }
-}
 
-Widget BuildPokemon(BuildContext context, Pokedex character) => InkWell(
+  Widget BuildPokemon(BuildContext context, Pokedex character) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
+    return InkWell(
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => CharacteristicsPage(
+                character: character,
+              ))),
       child: SizedBox(
         height: 184,
         width: 110,
@@ -181,8 +206,17 @@ Widget BuildPokemon(BuildContext context, Pokedex character) => InkWell(
                     character.sprites!.other!.officialArtwork!.frontDefault!,
                     fit: BoxFit.contain,
                     height: 104,
-                    width: 104,
+                    width: width * 0.3,
                   ),
+                  // child: SvgPicture.asset(
+                  //   "assets/images/pokeball_transparent.svg",
+                  //   color: colorSelector(
+                  //           character.types!.first.typeCategory!.name!)
+                  //       .withOpacity(0.5),
+                  //   fit: BoxFit.contain,
+                  //   height: 104,
+                  //   width: width * 0.277,
+                  // ),
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8, 0, 0, 8),
@@ -191,18 +225,18 @@ Widget BuildPokemon(BuildContext context, Pokedex character) => InkWell(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        "#${character.id}",
+                        "#" + character.id.toString().padLeft(3, '0'),
                         style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w400,
                             color: unselectedLabelColor),
                       ),
                       Text(
-                        character.name!,
+                        character.name!.capitalize(),
                         style: TextStyle(
                             fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: unselectedLabelColor),
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
                       ),
                       const SizedBox(
                         height: 10,
@@ -212,17 +246,17 @@ Widget BuildPokemon(BuildContext context, Pokedex character) => InkWell(
                         children: character.types!.map((i) {
                           return character.types!.length == i.slot
                               ? Text(
-                                  i.typeCategory!.name!,
+                                  i.typeCategory!.name!.capitalize(),
                                   style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: FontWeight.w400,
                                       color: unselectedLabelColor),
                                 )
                               : Text(
-                                  i.typeCategory!.name! + ', ',
+                                  i.typeCategory!.name!.capitalize() + ', ',
                                   style: TextStyle(
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w600,
+                                      fontWeight: FontWeight.w400,
                                       color: unselectedLabelColor),
                                 );
                         }).toList(),
@@ -234,3 +268,11 @@ Widget BuildPokemon(BuildContext context, Pokedex character) => InkWell(
         ),
       ),
     );
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+  }
+}

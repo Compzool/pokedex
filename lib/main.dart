@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get_navigation/get_navigation.dart';
-import 'package:pokedex/views/bloc/pokemon_bloc.dart';
-import 'package:pokedex/widgets/splash_screen.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:pokedex/controllers/bloc/pokemon_bloc.dart';
+import 'package:pokedex/views/splash_screen.dart';
 
-void main() {
+Future<void> main() async {
   // WidgetsFlutterBinding.ensureInitialized();
+  //final storage = await HydratedStorage.build(storageDirectory: ...);
   runApp(const MyApp());
+  
+}
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -27,4 +35,5 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+  
 }

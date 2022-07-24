@@ -5,7 +5,7 @@ Color colorSelector(String type) {
   switch (type) {
     case "grass":
     case "bug":
-      return TypeColors.lightTeal;
+      return TypeColors.greenAccent;
 
     case "fire":
       return TypeColors.lightRed;

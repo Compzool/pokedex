@@ -9,3 +9,14 @@ abstract class PokemonEvent extends Equatable {
 class InitCall extends PokemonEvent {}
 
 class RequestPokemonList extends PokemonEvent {}
+
+class AddToFavorites extends PokemonEvent {
+  Pokedex p;
+  AddToFavorites(this.p);
+}
+
+class RemoveFromFavorites extends PokemonEvent {
+  Pokedex p;
+
+  RemoveFromFavorites(this.p);
+}

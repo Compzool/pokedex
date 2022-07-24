@@ -29,5 +29,6 @@ class TypeColors {
   static const Color lightPink = Color(0xFFEE99AC);
   static const Color lightPurple = Color(0xFF9F5BBA);
   static const Color lightRed = Color(0xFFFB6C6C);
-  
+  static const Color greenAccent = Colors.greenAccent;
+  static const Color tealAccent = Colors.tealAccent;
 }
