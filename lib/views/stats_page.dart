@@ -1,6 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,210 +38,225 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
     double bmi = character.weight! / pow(character.height!, 2);
     double averagePower = 0;
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            color: Colors.black,
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(CupertinoIcons.back)),
-        backgroundColor:
-            colorSelector(character.types!.first.typeCategory!.name!)
-                .withOpacity(0.5),
-        elevation: 0,
-      ),
-      body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          SliverAppBar(
-            expandedHeight: height * 0.25,
-            automaticallyImplyLeading: false,
-            backgroundColor: color.withOpacity(0.5),
-            elevation: 0,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      top: BorderSide(
-                        width: 0.5,
-                        color: TypeColors.fadedColor,
+        appBar: AppBar(
+          leading: IconButton(
+              color: Colors.black,
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(CupertinoIcons.back)),
+          backgroundColor:
+              colorSelector(character.types!.first.typeCategory!.name!)
+                  .withOpacity(0.5),
+          elevation: 0,
+        ),
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverAppBar(
+              expandedHeight: height * 0.25,
+              automaticallyImplyLeading: false,
+              backgroundColor: color.withOpacity(0.5),
+              elevation: 0,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        top: BorderSide(
+                          width: 0.5,
+                          color: TypeColors.fadedColor,
+                        ),
                       ),
                     ),
-                  ),
-                  child: BuildThumbnail(context, character)),
-            ),
-            //forceElevated: innerBoxIsScrolled,
-            //floating: true,
-
-            pinned: false,
-            snap: false,
-            floating: false,
-            // flexibleSpace:
-            //     FlexibleSpaceBar(centerTitle: true, title: SizedBox()),
-          )
-        ],
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: height * 0.1,
-              child: Padding(
-                padding: EdgeInsets.only(left: width * 0.052),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Height",
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: TypeColors.fadedColor),
-                        ),
-                        SizedBox(
-                          height: height * 0.005,
-                        ),
-                        Text(
-                          character.height.toString(),
-                          style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: TypeColors.labelColor),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: width * 0.1,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Weight",
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: TypeColors.fadedColor),
-                        ),
-                        SizedBox(
-                          height: height * 0.005,
-                        ),
-                        Text(
-                          character.weight.toString(),
-                          style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: TypeColors.labelColor),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: width * 0.1,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "BMI",
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: TypeColors.fadedColor),
-                        ),
-                        SizedBox(
-                          height: height * 0.005,
-                        ),
-                        Text(
-                          bmi.toStringAsFixed(2),
-                          style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: TypeColors.labelColor),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                    child: BuildThumbnail(context, character)),
               ),
-            ),
-            Divider(
-              thickness: 10,
-              color: Colors.grey[300],
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: width * 0.052, top: height * 0.01),
-              child: Container(
-                height: height * 0.04,
-                child: const Text(
-                  "Base Stats",
-                  style: TextStyle(
-                    color: TypeColors.labelColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-            Divider(
-              thickness: 1,
-              color: Colors.grey[300],
-            ),
+              //forceElevated: innerBoxIsScrolled,
+              //floating: true,
 
-            Expanded(
-              child: ListView.builder(
-                  itemCount: character.stats!.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    averagePower += character.stats![index].baseStat!;
-
-                    if (index >= character.stats!.length - 1) {
-                      debugPrint("^^^" + index.toString());
-                      averagePower = averagePower / index;
-                      return ProgressBar(
-                        statName: "Avg.-Power",
-                        statValue: averagePower.toInt(),
-                      );
-                    }
-                    return ProgressBar(
-                        statName: character
-                            .stats![index].pokeStats!.name!.capitalize!,
-                        statValue: character.stats![index].baseStat!);
-                  }),
+              pinned: false,
+              snap: false,
+              floating: false,
+              // flexibleSpace:
+              //     FlexibleSpaceBar(centerTitle: true, title: SizedBox()),
             )
-
-            // BlocBuilder<PokemonBloc, PokemonState>(
-            //   builder: (context, state) {
-            //     if (state is PokemonLoaded) {
-            //       return Container(
-            //         height: height,
-            //         color: Colors.greenAccent,
-            //         child: TextButton(
-            //           onPressed: () {
-            //             if (state is PokemonLoaded) {
-            //               state.favorites.contains(character)
-            //                   ? context
-            //                       .read<PokemonBloc>()
-            //                       .add(RemoveFromFavorites(character))
-            //                   : context
-            //                       .read<PokemonBloc>()
-            //                       .add(AddToFavorites(character));
-            //             }
-            //           },
-            //           child: state.favorites.contains(character)
-            //               ? Text("Remove From Favorites")
-            //               : Text("Add To Favorites"),
-            //         ),
-            //       );
-            //     } else {
-            //       return SizedBox();
-            //     }
-            //   },
-            // )
           ],
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: height * 0.1,
+                child: Padding(
+                  padding: EdgeInsets.only(left: width * 0.052),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Height",
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: TypeColors.fadedColor),
+                          ),
+                          SizedBox(
+                            height: height * 0.005,
+                          ),
+                          Text(
+                            character.height.toString(),
+                            style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: TypeColors.labelColor),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: width * 0.1,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "Weight",
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: TypeColors.fadedColor),
+                          ),
+                          SizedBox(
+                            height: height * 0.005,
+                          ),
+                          Text(
+                            character.weight.toString(),
+                            style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: TypeColors.labelColor),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: width * 0.1,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "BMI",
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: TypeColors.fadedColor),
+                          ),
+                          SizedBox(
+                            height: height * 0.005,
+                          ),
+                          Text(
+                            bmi.toStringAsFixed(2),
+                            style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: TypeColors.labelColor),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Divider(
+                thickness: 10,
+                color: Colors.grey[300],
+              ),
+              Padding(
+                padding:
+                    EdgeInsets.only(left: width * 0.052, top: height * 0.01),
+                child: Container(
+                  height: height * 0.04,
+                  child: const Text(
+                    "Base Stats",
+                    style: TextStyle(
+                      color: TypeColors.labelColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+              Divider(
+                thickness: 1,
+                color: Colors.grey[300],
+              ),
+              SizedBox(
+                height: height * 0.01,
+              ),
+              Expanded(
+                child: ListView.builder(
+                    itemCount: character.stats!.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      averagePower += character.stats![index].baseStat!;
+
+                      if (index >= character.stats!.length - 1) {
+                        debugPrint("^^^" + index.toString());
+                        averagePower = averagePower / index;
+                        return ProgressBar(
+                          statName: "Avg.-Power",
+                          statValue: averagePower.toInt(),
+                        );
+                      }
+                      return ProgressBar(
+                          statName: character
+                              .stats![index].pokeStats!.name!.capitalize!,
+                          statValue: character.stats![index].baseStat!);
+                    }),
+              )
+            ],
+          ),
         ),
-      ),
-    );
+        floatingActionButton: BlocBuilder<PokemonBloc, PokemonState>(
+          builder: (context, state) {
+            if (state is PokemonLoaded) {
+              return Theme(
+                  data: Theme.of(context).copyWith(
+                    floatingActionButtonTheme: FloatingActionButtonThemeData(
+                      foregroundColor: state.favorites.contains(character)
+                          ? TypeColors.floatingButtonColor
+                          : Colors.white,
+                      backgroundColor: state.favorites.contains(character)
+                          ? TypeColors.removeFromFavorites
+                          : TypeColors.floatingButtonColor,
+                      extendedSizeConstraints:
+                          state.favorites.contains(character)
+                              ? BoxConstraints.tightFor(height: 50, width: 201)
+                              : BoxConstraints.tightFor(height: 50, width: 157),
+                    ),
+                  ),
+                  child: FloatingActionButton.extended(
+                      onPressed: () {
+                        if (state is PokemonLoaded) {
+                          state.favorites.contains(character)
+                              ? context
+                                  .read<PokemonBloc>()
+                                  .add(RemoveFromFavorites(character))
+                              : context
+                                  .read<PokemonBloc>()
+                                  .add(AddToFavorites(character));
+                        }
+                      },
+                      label: state.favorites.contains(character)
+                          ? Text(
+                              "Remove from favorites",
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            )
+                          : Text("Mark as favorite",
+                              style: TextStyle(fontWeight: FontWeight.w700))));
+            } else {
+              return SizedBox.shrink();
+            }
+          },
+        ));
   }
 
   Widget BuildThumbnail(BuildContext context, Pokedex character) {

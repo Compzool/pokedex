@@ -38,6 +38,8 @@ class TypeColors {
   static const Color indicatorColor = Color(0xFF3558CD);
   static const Color pokedexColor = Color(0xFF61A33);
   static const Color backgroundColor = Color(0xFF3558CD);
+  static const Color floatingButtonColor = Color(0xFF3558CD);
+  static const Color removeFromFavorites = Color(0xFFD5DEFF);
 
   static const Color statColor = Color(0xFFCD2873);
   static const Color specialStatColor = Color(0xFFEEC218);
