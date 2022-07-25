@@ -30,8 +30,8 @@ class _SplashScreenState extends State<SplashScreen> {
               SizedBox(
                   height: height * 0.2,
                   width: width * 0.2,
-                  child: Lottie.network(
-                      'https://assets5.lottiefiles.com/packages/lf20_iwmd6pyr.json')),
+                  child: Lottie.asset(
+                      'assets/lottie/lottie_ball.json')),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
