@@ -40,6 +40,7 @@ class TypeColors {
   static const Color backgroundColor = Color(0xFF3558CD);
   static const Color floatingButtonColor = Color(0xFF3558CD);
   static const Color removeFromFavorites = Color(0xFFD5DEFF);
+  static const Color favoriteCounterColor = Color(0xFF3558CD);
 
   static const Color statColor = Color(0xFFCD2873);
   static const Color specialStatColor = Color(0xFFEEC218);

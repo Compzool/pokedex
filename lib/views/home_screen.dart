@@ -35,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
     return DefaultTabController(
         length: 2,
         child: Scaffold(
@@ -78,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen>
                     color: Colors.grey[400],
                     thickness: 1,
                   ),
-                  const TabBar(
+                  TabBar(
                     unselectedLabelColor: TypeColors.fadedColor,
                     labelColor: TypeColors.labelColor,
                     indicatorColor: TypeColors.indicatorColor,
@@ -92,10 +91,57 @@ class _HomeScreenState extends State<HomeScreen>
                         ),
                       ),
                       Tab(
-                        child: Text(
-                          'Favorites',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w400, fontSize: 16),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Favorites',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400, fontSize: 16),
+                            ),
+                            SizedBox(
+                              width: width * 0.015,
+                            ),
+                            Container(
+                              width: 25.0,
+                              height: 25.0,
+                              decoration: BoxDecoration(
+                                color: TypeColors.favoriteCounterColor,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: TypeColors.favoriteCounterColor,
+                                  width: 5.0,
+                                  style: BorderStyle.solid,
+                                ),
+                              ),
+                              child: BlocBuilder<PokemonBloc, PokemonState>(
+                                builder: (context, state) {
+                                  if (state is PokemonLoaded) {
+                                    return Center(
+                                      child: Text(
+                                        state.favorites.length.toString(),
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    return Center(
+                                      child: Text(
+                                        '0',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       )
                     ],
