@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:lottie/lottie.dart';
 import 'package:pokedex/views/home_screen.dart';
@@ -61,8 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   changeScreen() async {
     await Future.delayed(const Duration(seconds: 3), () {
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
+      Get.offAll(() => HomeScreen(),transition: Transition.fade,duration: Duration(milliseconds: 2000));
       ;
     });
   }

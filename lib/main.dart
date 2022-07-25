@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => PokemonBloc(),
-      child: MaterialApp(
+      child: GetMaterialApp(
         title: 'Pokedex',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

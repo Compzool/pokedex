@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pokedex/controllers/bloc/pokemon_bloc.dart';
+import 'package:pokedex/views/favorites_pokemon.dart';
 import 'package:pokedex/widgets/pokemon_widget.dart';
 
 class PokemonBuilder extends StatefulWidget {
@@ -40,7 +41,12 @@ class _PokemonBuilderState extends State<PokemonBuilder> {
                       (context, index) {
                         debugPrint(
                             "Type 1: ${state.list[index].types!.first.toJson()}");
-
+                        if (state.favorites.contains(state.list[index])) {
+                          return Hero(
+                              tag: state.list[index].name!,
+                              child:
+                                  PokemonWidget(character: state.list[index]));
+                        }
                         return PokemonWidget(character: state.list[index]);
                       },
                       childCount: state.list.length,
@@ -48,31 +54,7 @@ class _PokemonBuilderState extends State<PokemonBuilder> {
                   ),
                 ),
               ]),
-              CustomScrollView(slivers: [
-                SliverPadding(
-                  padding: const EdgeInsets.all(8),
-                  sliver: SliverGrid(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      mainAxisExtent: 190,
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 0.277,
-                      mainAxisSpacing: 12,
-                      childAspectRatio: 1,
-                    ),
-                    delegate: SliverChildBuilderDelegate(
-                      //API CALL - CONTROLLER TAKES THE API CALL AND MAKES A LIST.
-                      (context, index) {
-                        debugPrint(
-                            "Type 1: ${state.favorites[index].types!.first.toJson()}");
-
-                        return PokemonWidget(character: state.favorites[index]);
-                      },
-                      childCount: state.favorites.length,
-                    ),
-                  ),
-                ),
-              ]),
+              FavoritesPokemon(),
             ],
           );
         } else if (state is PokemonLoading) {
