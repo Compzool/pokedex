@@ -43,191 +43,40 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
             color: Colors.black,
             onPressed: () => Navigator.pop(context),
             icon: const Icon(CupertinoIcons.back)),
-        backgroundColor: color.withOpacity(0.15),
+        backgroundColor:
+            colorSelector(character.types!.first.typeCategory!.name!)
+                .withOpacity(0.5),
         elevation: 0,
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(height * 0),
-          child: Divider(
-            thickness: 1,
-          ),
-        ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
+      // appBar: AppBar(
+      //   backgroundColor:
+      //       colorSelector(character.types!.first.typeCategory!.name!)
+      //           .withOpacity(0.15),
+      //   elevation: 0,
+      // ),
+      body: NestedScrollView(
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          SliverAppBar(
+            expandedHeight: height * 0.35,
+            automaticallyImplyLeading: false,
+            backgroundColor: color.withOpacity(0.5),
+            elevation: 0,
+            flexibleSpace: FlexibleSpaceBar(
+              background: BuildThumbnail(context, character),
+            ),
+            //forceElevated: innerBoxIsScrolled,
+            //floating: true,
+
+            pinned: false,
+            snap: false,
+            floating: false,
+            // flexibleSpace:
+            //     FlexibleSpaceBar(centerTitle: true, title: SizedBox()),
+          )
+        ],
+        body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              color: colorSelector(character.types!.first.typeCategory!.name!)
-                  .withOpacity(0.15),
-              child: Padding(
-                padding: EdgeInsets.only(left: width * 0.052),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          character.name!.capitalize!,
-                          style: const TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.black),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: character.types!.map((i) {
-                            return character.types!.length == i.slot
-                                ? Text(
-                                    i.typeCategory!.name!.capitalize!,
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        color: TypeColors.labelColor),
-                                  )
-                                : Text(
-                                    i.typeCategory!.name!.capitalize! + ', ',
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        color: TypeColors.labelColor),
-                                  );
-                          }).toList(),
-                        ),
-                        SizedBox(
-                          height: height * 0.1,
-                        ),
-                        Text(
-                          "#" + character.id.toString().padLeft(3, '0'),
-                          style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: TypeColors.labelColor),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Stack(
-                          alignment: Alignment.bottomRight,
-                          children: [
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: SvgPicture.asset(
-                                "assets/images/pokeball_transparent.svg",
-                                color: colorSelector(character
-                                        .types!.first.typeCategory!.name!)
-                                    .withOpacity(0.5),
-                                fit: BoxFit.contain,
-                                height: height * 0.2,
-                                width: width * 0.2,
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Image.network(
-                                character.sprites!.other!.officialArtwork!
-                                    .frontDefault!,
-                                height: 125,
-                                width: width * 0.35,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              height: height * 0.1,
-              child: Padding(
-                padding: EdgeInsets.only(left: width * 0.052),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Height",
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: TypeColors.fadedColor),
-                        ),
-                        SizedBox(
-                          height: height * 0.005,
-                        ),
-                        Text(
-                          character.height.toString(),
-                          style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: TypeColors.labelColor),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: width * 0.1,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Weight",
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: TypeColors.fadedColor),
-                        ),
-                        SizedBox(
-                          height: height * 0.005,
-                        ),
-                        Text(
-                          character.weight.toString(),
-                          style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: TypeColors.labelColor),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      width: width * 0.1,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "BMI",
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                              color: TypeColors.fadedColor),
-                        ),
-                        SizedBox(
-                          height: height * 0.005,
-                        ),
-                        Text(
-                          bmi.toStringAsFixed(2),
-                          style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: TypeColors.labelColor),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
             Divider(
               thickness: 10,
               color: Colors.grey[300],
@@ -288,8 +137,184 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
   // Widget BuildStats(BuildContext context, Pokedex character, Color color) {
   //   return Container(
   //     child: ListView.builder(
-        
+
   //       itemBuilder: itemBuilder)
   //   )
   // }
+
+  Widget BuildThumbnail(BuildContext context, Pokedex character) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    double bmi = character.weight! / pow(character.height!, 2);
+    return Column(children: [
+      Padding(
+        padding: EdgeInsets.only(left: width * 0.052),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  character.name!.capitalize!,
+                  style: const TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: character.types!.map((i) {
+                    return character.types!.length == i.slot
+                        ? Text(
+                            i.typeCategory!.name!.capitalize!,
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: TypeColors.labelColor),
+                          )
+                        : Text(
+                            i.typeCategory!.name!.capitalize! + ', ',
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: TypeColors.labelColor),
+                          );
+                  }).toList(),
+                ),
+                SizedBox(
+                  height: height * 0.1,
+                ),
+                Text(
+                  "#" + character.id.toString().padLeft(3, '0'),
+                  style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: TypeColors.labelColor),
+                ),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: SvgPicture.asset(
+                        "assets/images/pokeball_transparent.svg",
+                        color: colorSelector(
+                                character.types!.first.typeCategory!.name!)
+                            .withOpacity(0.5),
+                        fit: BoxFit.contain,
+                        height: height * 0.2,
+                        width: width * 0.2,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Image.network(
+                        character
+                            .sprites!.other!.officialArtwork!.frontDefault!,
+                        height: 125,
+                        width: width * 0.35,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+      Container(
+        height: height * 0.1,
+        child: Padding(
+          padding: EdgeInsets.only(left: width * 0.052),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Height",
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: TypeColors.fadedColor),
+                  ),
+                  SizedBox(
+                    height: height * 0.005,
+                  ),
+                  Text(
+                    character.height.toString(),
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: TypeColors.labelColor),
+                  ),
+                ],
+              ),
+              SizedBox(
+                width: width * 0.1,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "Weight",
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: TypeColors.fadedColor),
+                  ),
+                  SizedBox(
+                    height: height * 0.005,
+                  ),
+                  Text(
+                    character.weight.toString(),
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: TypeColors.labelColor),
+                  ),
+                ],
+              ),
+              SizedBox(
+                width: width * 0.1,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    "BMI",
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: TypeColors.fadedColor),
+                  ),
+                  SizedBox(
+                    height: height * 0.005,
+                  ),
+                  Text(
+                    bmi.toStringAsFixed(2),
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: TypeColors.labelColor),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ]);
+  }
 }
