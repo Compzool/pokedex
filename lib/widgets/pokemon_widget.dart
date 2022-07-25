@@ -24,8 +24,8 @@ class _PokemonWidgetState extends State<PokemonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return InkWell(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => CharacteristicsPage(

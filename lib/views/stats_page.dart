@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:pokedex/controllers/bloc/pokemon_bloc.dart';
 import 'package:pokedex/models/pokedex.dart';
 import 'package:pokedex/widgets/color_selector.dart';
+import 'package:pokedex/widgets/progress_bar.dart';
 
 import 'package:pokedex/widgets/type_colors.dart';
 
@@ -23,7 +24,7 @@ class CharacteristicsPage extends StatefulWidget {
 class _CharacteristicsPageState extends State<CharacteristicsPage> {
   late Pokedex character;
   late var color;
-  // List<Pokedex> stats= [character.stats[index].pokeStats.name];
+  //List<Pokedex> stats= [character.stats[index].pokeStats!.name!,character.stats[index].baseStat];
   @override
   void initState() {
     // TODO: implement initState
@@ -37,6 +38,7 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     double bmi = character.weight! / pow(character.height!, 2);
+    double averagePower = 0;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -48,21 +50,24 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
                 .withOpacity(0.5),
         elevation: 0,
       ),
-      // appBar: AppBar(
-      //   backgroundColor:
-      //       colorSelector(character.types!.first.typeCategory!.name!)
-      //           .withOpacity(0.15),
-      //   elevation: 0,
-      // ),
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           SliverAppBar(
-            expandedHeight: height * 0.35,
+            expandedHeight: height * 0.25,
             automaticallyImplyLeading: false,
             backgroundColor: color.withOpacity(0.5),
             elevation: 0,
             flexibleSpace: FlexibleSpaceBar(
-              background: BuildThumbnail(context, character),
+              background: Container(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        width: 0.5,
+                        color: TypeColors.fadedColor,
+                      ),
+                    ),
+                  ),
+                  child: BuildThumbnail(context, character)),
             ),
             //forceElevated: innerBoxIsScrolled,
             //floating: true,
@@ -77,6 +82,92 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Container(
+              height: height * 0.1,
+              child: Padding(
+                padding: EdgeInsets.only(left: width * 0.052),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Height",
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: TypeColors.fadedColor),
+                        ),
+                        SizedBox(
+                          height: height * 0.005,
+                        ),
+                        Text(
+                          character.height.toString(),
+                          style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: TypeColors.labelColor),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: width * 0.1,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Weight",
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: TypeColors.fadedColor),
+                        ),
+                        SizedBox(
+                          height: height * 0.005,
+                        ),
+                        Text(
+                          character.weight.toString(),
+                          style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: TypeColors.labelColor),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: width * 0.1,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "BMI",
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: TypeColors.fadedColor),
+                        ),
+                        SizedBox(
+                          height: height * 0.005,
+                        ),
+                        Text(
+                          bmi.toStringAsFixed(2),
+                          style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: TypeColors.labelColor),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
             Divider(
               thickness: 10,
               color: Colors.grey[300],
@@ -99,6 +190,27 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
               thickness: 1,
               color: Colors.grey[300],
             ),
+
+            Expanded(
+              child: ListView.builder(
+                  itemCount: character.stats!.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    averagePower += character.stats![index].baseStat!;
+
+                    if (index >= character.stats!.length - 1) {
+                      debugPrint("^^^" + index.toString());
+                      averagePower = averagePower / index;
+                      return ProgressBar(
+                        statName: "Avg.-Power",
+                        statValue: averagePower.toInt(),
+                      );
+                    }
+                    return ProgressBar(
+                        statName: character
+                            .stats![index].pokeStats!.name!.capitalize!,
+                        statValue: character.stats![index].baseStat!);
+                  }),
+            )
 
             // BlocBuilder<PokemonBloc, PokemonState>(
             //   builder: (context, state) {
@@ -134,75 +246,73 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
     );
   }
 
-  // Widget BuildStats(BuildContext context, Pokedex character, Color color) {
-  //   return Container(
-  //     child: ListView.builder(
-
-  //       itemBuilder: itemBuilder)
-  //   )
-  // }
-
   Widget BuildThumbnail(BuildContext context, Pokedex character) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     double bmi = character.weight! / pow(character.height!, 2);
-    return Column(children: [
-      Padding(
-        padding: EdgeInsets.only(left: width * 0.052),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              // mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  character.name!.capitalize!,
-                  style: const TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: character.types!.map((i) {
-                    return character.types!.length == i.slot
-                        ? Text(
-                            i.typeCategory!.name!.capitalize!,
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: TypeColors.labelColor),
-                          )
-                        : Text(
-                            i.typeCategory!.name!.capitalize! + ', ',
-                            style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: TypeColors.labelColor),
-                          );
-                  }).toList(),
-                ),
-                SizedBox(
-                  height: height * 0.1,
-                ),
-                Text(
+    return Padding(
+      padding: EdgeInsets.only(left: width * 0.052),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                character.name!.capitalize!,
+                style: const TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: character.types!.map((i) {
+                  return character.types!.length == i.slot
+                      ? Text(
+                          i.typeCategory!.name!.capitalize!,
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: TypeColors.labelColor),
+                        )
+                      : Text(
+                          i.typeCategory!.name!.capitalize! + ', ',
+                          style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: TypeColors.labelColor),
+                        );
+                }).toList(),
+              ),
+              SizedBox(
+                height: height * 0.1,
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: height * 0.02),
+                child: Text(
                   "#" + character.id.toString().padLeft(3, '0'),
                   style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
                       color: TypeColors.labelColor),
                 ),
-              ],
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Stack(
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Container(
+                // height: height * 0.4,
+                // width: width * 0.35,
+                child: Stack(
                   alignment: Alignment.bottomRight,
                   children: [
                     Align(
-                      alignment: Alignment.centerRight,
+                      alignment: Alignment.bottomCenter,
                       child: SvgPicture.asset(
                         "assets/images/pokeball_transparent.svg",
                         color: colorSelector(
@@ -224,97 +334,11 @@ class _CharacteristicsPageState extends State<CharacteristicsPage> {
                     ),
                   ],
                 ),
-              ],
-            )
-          ],
-        ),
-      ),
-      Container(
-        height: height * 0.1,
-        child: Padding(
-          padding: EdgeInsets.only(left: width * 0.052),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Height",
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: TypeColors.fadedColor),
-                  ),
-                  SizedBox(
-                    height: height * 0.005,
-                  ),
-                  Text(
-                    character.height.toString(),
-                    style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: TypeColors.labelColor),
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: width * 0.1,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "Weight",
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: TypeColors.fadedColor),
-                  ),
-                  SizedBox(
-                    height: height * 0.005,
-                  ),
-                  Text(
-                    character.weight.toString(),
-                    style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: TypeColors.labelColor),
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: width * 0.1,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    "BMI",
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: TypeColors.fadedColor),
-                  ),
-                  SizedBox(
-                    height: height * 0.005,
-                  ),
-                  Text(
-                    bmi.toStringAsFixed(2),
-                    style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: TypeColors.labelColor),
-                  ),
-                ],
               ),
             ],
           ),
-        ),
+        ],
       ),
-    ]);
+    );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex/widgets/hex_colors.dart';
+import 'package:pokedex/widgets/hex_generator.dart';
 
 class TypeColors {
   static const Color lightTeal = Color(0xFF48D0B0);
@@ -38,4 +38,8 @@ class TypeColors {
   static const Color indicatorColor = Color(0xFF3558CD);
   static const Color pokedexColor = Color(0xFF61A33);
   static const Color backgroundColor = Color(0xFF3558CD);
+
+  static const Color statColor = Color(0xFFCD2873);
+  static const Color specialStatColor = Color(0xFFEEC218);
+  static const Color emptyStatColor = Color(0xFFE8E8E8);
 }
