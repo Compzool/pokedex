@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:lottie/lottie.dart';
-import 'package:pokedex/controllers/home_screen.dart';
-import 'package:pokedex/widgets/constants.dart';
-import 'package:pokedex/widgets/hex_colors.dart';
+import 'package:pokedex/views/home_screen.dart';
+
+import 'package:pokedex/widgets/type_colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
     final height = MediaQuery.of(context).size.height;
     changeScreen();
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: TypeColors.backgroundColor,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,8 +31,8 @@ class _SplashScreenState extends State<SplashScreen> {
               SizedBox(
                   height: height * 0.2,
                   width: width * 0.2,
-                  child: Lottie.network(
-                      'https://assets5.lottiefiles.com/packages/lf20_iwmd6pyr.json')),
+                  child: Lottie.asset(
+                      'assets/lottie/lottie_ball.json')),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
@@ -61,8 +62,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   changeScreen() async {
     await Future.delayed(const Duration(seconds: 3), () {
-      Get.off(() => const HomeScreen(),
-          transition: Transition.fade, duration: const Duration(seconds: 1));
+      Get.offAll(() => HomeScreen(),transition: Transition.fade,duration: Duration(milliseconds: 2000));
+      ;
     });
   }
 }
